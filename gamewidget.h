@@ -6,6 +6,12 @@
 #include <QHostInfo>
 #include <QtNetwork>
 #include <QNetworkInterface>
+#include <QFileDialog>
+#include <QRandomGenerator>
+
+#include "solver.h"
+#include "expression.h"
+#include "frac.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -56,7 +62,15 @@ private slots:
 private:
     Ui::GameWidget *ui;
     QUdpSocket *udpSocket;
+    Solver *solver;
     qint16 port;
+    int randomNums[4];
+    int offlinePoints;
     void sendMessage(MessageType type);
+    void getRandomNums();
+    void offlinePointShowcasing();
+    void offlineNumShowcaseing();
+
+    QString ID;
 };
 #endif // GAMEWIDGET_H

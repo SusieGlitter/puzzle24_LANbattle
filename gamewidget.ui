@@ -48,7 +48,7 @@
       <rect>
        <x>20</x>
        <y>180</y>
-       <width>260</width>
+       <width>250</width>
        <height>70</height>
       </rect>
      </property>
@@ -194,7 +194,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="onlineModeCreatPage">
       <widget class="QComboBox" name="onlineModePortSelect">
@@ -370,9 +370,9 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>10</y>
+         <y>5</y>
          <width>75</width>
-         <height>20</height>
+         <height>30</height>
         </rect>
        </property>
        <property name="text">
