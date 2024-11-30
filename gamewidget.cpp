@@ -23,6 +23,9 @@ GameWidget::GameWidget(QWidget *parent)
 
     setStage(resting);
     changeID();
+
+    IDList.clear();
+    pointList.clear();
 }
 
 GameWidget::~GameWidget()
@@ -142,8 +145,8 @@ void GameWidget::hearMessage()
         case noticeGameStart:
             if(stage==waitingStart)
             {
+                ui->onlineModeTextEdit->clear();
                 setStage(playingGame);
-                pointList.clear();
                 for(int i=0;i<IDList.length();i++)
                     pointList.push_back(0);
             }
@@ -175,10 +178,27 @@ void GameWidget::hearMessage()
             }
             break;
         case noticeGameQuit:
-
+            in>>mes1;
+            if(stage==playingGame)
+            {
+                if(mes1==ID)
+                {
+                    IDList.clear();
+                    pointList.clear();
+                    setStage(resting);
+                    ui->onlineModeDebugLabel->setText("退出了游戏");
+                }
+                else
+                {
+                    // 还没确定要不要把退出的人除名,暂时不除名
+                }
+            }
             break;
         case noticeGameEnd:
-
+            if(stage==playingGame)
+            {
+                setStage(lookingRank);
+            }
             break;
         default:
             break;
@@ -422,7 +442,18 @@ void GameWidget::on_onlineModeStartButton_clicked()
 
 void GameWidget::on_onlineModeQuitGameButton_clicked()
 {
-
+    if(stage==playingGame)
+    {
+        if(host)
+        {
+            host=false;
+            sendMessage(noticeGameEnd);
+        }
+        else
+        {
+            sendMessage(noticeGameQuit);
+        }
+    }
 }
 
 
@@ -454,7 +485,9 @@ void GameWidget::on_onlineModeSaveButton_clicked()
 
 void GameWidget::on_onlineModeExitButton_clicked()
 {
-    ui->onlineModeStackedWidget->setCurrentIndex(0);
+    IDList.clear();
+    pointList.clear();
+    setStage(resting);
 }
 
 
