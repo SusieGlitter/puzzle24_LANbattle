@@ -26,6 +26,8 @@ GameWidget::GameWidget(QWidget *parent)
 
     IDList.clear();
     pointList.clear();
+
+    ui->onlineModeRankTabel->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 GameWidget::~GameWidget()
@@ -294,8 +296,17 @@ void GameWidget::setStage(Stage stage)
         ui->onlineModeStackedWidget->setCurrentIndex(1);
         break;
     case lookingRank:
+        ui->onlineModeRankTabel->clearContents();
+        ui->onlineModeRankTabel->setRowCount(IDList.length());
 
         ui->onlineModeStackedWidget->setCurrentIndex(2);
+        for(int i=0;i<IDList.length();i++)
+        {
+            QTableWidgetItem *IDItem=new QTableWidgetItem(IDList[i]);
+            QTableWidgetItem *PointsItem=new QTableWidgetItem(QString::number(pointList[i]));
+            ui->onlineModeRankTabel->setItem(i,0,IDItem);
+            ui->onlineModeRankTabel->setItem(i,1,PointsItem);
+        }
         break;
     default:
         break;
@@ -377,12 +388,28 @@ void GameWidget::on_offlineModeCheckButton_clicked()
 {
     Expression exp;
     exp.setExpression(ui->offlineModeTextEdit->toPlainText());
+    exp.calculate();
+    Frac res=exp.res;
+    bool accept=!exp.err;
+    bool used[4]={false,false,false,false};
+    for(int i=0;i<4;i++)
+        for(int j=0;j<4;j++)
+            if(!used[j]&&exp.usedNums[i]==randomNums[j])
+            {
+                used[j]=true;
+                break;
+            }
+    for(int j=0;j<4;j++)
+        if(!used[j])
+            accept=false;
 
-    // if(exp.calculate()==Frac(24,1))
+    ui->offlineModeTextEdit->append(QString::number(res.num)+"/"+QString::number(res.den));
+
+    if(accept==true&&res==Frac(24))
     {
         offlinePoints+=1;
         offlinePointShowcasing();
-        ui->offlineModeTextEdit->clear();
+        // ui->offlineModeTextEdit->clear();
 
         getRandomNums();
         offlineNumShowcaseing();
@@ -468,8 +495,24 @@ void GameWidget::on_onlineModeCheckButton_clicked()
     {
         Expression exp;
         exp.setExpression(ui->onlineModeTextEdit->toPlainText());
+        exp.calculate();
+        Frac res=exp.res;
+        bool accept=!exp.err;
+        bool used[4]={false,false,false,false};
+        for(int i=0;i<4;i++)
+            for(int j=0;j<4;j++)
+                if(!used[j]&&exp.usedNums[i]==randomNums[j])
+                {
+                    used[j]=true;
+                    break;
+                }
+        for(int j=0;j<4;j++)
+            if(!used[j])
+                accept=false;
 
-        // if(exp.calculate()==Frac(24,1))
+        ui->onlineModeTextEdit->append(QString::number(res.num)+"/"+QString::number(res.den));
+
+        if(accept==true&&res==Frac(24))
         {
             sendMessage(noticeCorrect);
         }

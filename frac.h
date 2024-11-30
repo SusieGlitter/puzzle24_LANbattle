@@ -6,7 +6,7 @@ class Frac
 public:
     Frac();
     Frac(const Frac &that);
-    Frac(int num,int den);
+    Frac(int num,int den=1);
     Frac operator=(const Frac &that);
     Frac operator+(const Frac &that);
     Frac operator-();
@@ -19,9 +19,9 @@ public:
     bool operator<=(const Frac &that);
     bool operator>(const Frac &that);
     bool operator>=(const Frac &that);
-private:
     int num;
     int den;
+private:
     void setFrac(int num,int den);
     void simplify();
 };
