@@ -194,7 +194,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="onlineModeCreatPage">
       <widget class="QComboBox" name="onlineModePortSelect">
@@ -266,7 +266,36 @@
         </rect>
        </property>
        <property name="text">
-        <string>开始游戏</string>
+        <string>寻找房间</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="onlineModeDebugLabel">
+       <property name="geometry">
+        <rect>
+         <x>110</x>
+         <y>120</y>
+         <width>200</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>debug</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="onlineModeQuitRoomButton">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>75</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>离开房间</string>
        </property>
       </widget>
      </widget>
@@ -328,9 +357,9 @@
        <property name="geometry">
         <rect>
          <x>305</x>
-         <y>220</y>
+         <y>200</y>
          <width>75</width>
-         <height>30</height>
+         <height>50</height>
         </rect>
        </property>
        <property name="text">
@@ -343,11 +372,11 @@
          <x>305</x>
          <y>159</y>
          <width>75</width>
-         <height>51</height>
+         <height>30</height>
         </rect>
        </property>
        <property name="placeholderText">
-        <string>得分:        排名:</string>
+        <string>得分: </string>
        </property>
       </widget>
       <widget class="QLabel" name="onlineModeGameLabel">
@@ -366,7 +395,7 @@
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-      <widget class="QPushButton" name="onlineModeQuitButton">
+      <widget class="QPushButton" name="onlineModeQuitGameButton">
        <property name="geometry">
         <rect>
          <x>20</x>

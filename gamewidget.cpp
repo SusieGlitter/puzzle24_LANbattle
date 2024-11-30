@@ -20,6 +20,9 @@ GameWidget::GameWidget(QWidget *parent)
     port=ui->onlineModePortSelect->currentIndex()+1145;
     udpSocket->bind(port,QUdpSocket::ShareAddress|QUdpSocket::ReuseAddressHint);
     connect(udpSocket,SIGNAL(readyRead()),this,SLOT(hearMessage()));
+
+    setStage(resting);
+    changeID();
 }
 
 GameWidget::~GameWidget()
@@ -28,14 +31,32 @@ GameWidget::~GameWidget()
 }
 
 
-void GameWidget::sendMessage(MessageType type)
+void GameWidget::sendMessage(MessageType type,QString desID)
 {
     QByteArray data;
     QDataStream out(&data,QIODevice::WriteOnly);
     out<<type;
     switch (type) {
-    case test:
-        // out<<;
+    case questRoom:
+        out<<ID;
+        break;
+    case ansRoomNameRepeat:
+        out<<desID;
+        break;
+    case ansRoomAccept:
+        out<<desID<<IDList;
+        break;
+    case noticeQuitRoom:
+        out<<ID;
+        break;
+    case noticeNewQuestion:
+        out<<randomNums[0]<<randomNums[1]<<randomNums[2]<<randomNums[3];
+        break;
+    case noticeCorrect:
+        out<<ID<<ui->onlineModeTextEdit->toPlainText();
+        break;
+    case noticeGameQuit:
+        out<<ID;
         break;
     default:
         break;
@@ -53,11 +74,111 @@ void GameWidget::hearMessage()
         QDataStream in(&datagram,QIODevice::ReadOnly);
         int type;
         in>>type;
-        QString mes;
+
+        QString mes1,mes2;
+        QStringList mesList;
+
         switch (type) {
-        case test:
-            in>>mes;
-            // ...
+        case questRoom:
+            in>>mes1;
+            if(!host)break;
+            if(stage==playingGame)
+                sendMessage(ansRoomGaming);
+            else if(IDList.contains(mes1))
+                sendMessage(ansRoomNameRepeat,mes1);
+            else if(stage==waitingStart)
+                sendMessage(ansRoomAccept,mes1);
+            break;
+        case ansRoomGaming:
+            if(stage==findingRoom)
+            {
+                setStage(resting);
+                ui->onlineModeDebugLabel->setText("当前有正在进行的游戏");
+            }
+            break;
+        case ansRoomNameRepeat:
+            in>>mes1;
+            if(mes1==ID&&stage==findingRoom)
+            {
+                setStage(resting);
+                ui->onlineModeDebugLabel->setText("ID被占用");
+            }
+            break;
+        case ansRoomAccept:
+            in>>mes1>>mesList;
+            if(mes1==ID&&stage==findingRoom)
+            {
+                host=false;
+                setStage(waitingStart);
+                IDList=mesList;
+                ui->onlineModeDebugLabel->setText("成功加入房间");
+            }
+            if(stage==waitingStart)
+                IDList.append(mes1);
+            break;
+        case noticeQuitRoom:
+            in>>mes1;
+            if(stage==waitingStart)
+            {
+                if(mes1==ID)
+                {
+                    setStage(resting);
+                    ui->onlineModeDebugLabel->setText("退出房间");
+                }
+                else
+                {
+                    IDList.removeAll(mes1);
+                }
+            }
+            break;
+        case noticeKillRoom:
+            if(stage==waitingStart)
+            {
+                host=false;
+                setStage(resting);
+                ui->onlineModeDebugLabel->setText("房间被解散了");
+            }
+            break;
+        case noticeGameStart:
+            if(stage==waitingStart)
+            {
+                setStage(playingGame);
+                pointList.clear();
+                for(int i=0;i<IDList.length();i++)
+                    pointList.push_back(0);
+            }
+            break;
+        case noticeNewQuestion:
+            if(stage==playingGame)
+            {
+                in>>randomNums[0]>>randomNums[1]>>randomNums[2]>>randomNums[3];
+                onlineNumShowcaseing();
+                ui->onlineModeTextEdit->clear();
+                ui->onlineModeCheckButton->setDisabled(false);
+                ui->onlineModeCheckButton->setVisible(true);
+                ui->onlineModeCheckButton->setText("提交");
+
+            }
+            break;
+        case noticeCorrect:
+            if(stage==playingGame)
+            {
+                in>>mes1>>mes2;
+                setStage(playingGame);
+                ui->onlineModeTextEdit->setPlainText(mes1+" has got 24!\n"+mes2);
+                for(int i=0;i<IDList.length();i++)
+                    if(mes1==IDList[i])
+                    {
+                        pointList[i]++;
+                        break;
+                    }
+            }
+            break;
+        case noticeGameQuit:
+
+            break;
+        case noticeGameEnd:
+
             break;
         default:
             break;
@@ -86,6 +207,79 @@ void GameWidget::offlineNumShowcaseing()
     ui->offlineModeNumShowcase2->setPlainText(QString::number(randomNums[1]));
     ui->offlineModeNumShowcase3->setPlainText(QString::number(randomNums[2]));
     ui->offlineModeNumShowcase4->setPlainText(QString::number(randomNums[3]));
+}
+void GameWidget::onlineNumShowcaseing()
+{
+    ui->onlineModeNumShowcase1->setPlainText(QString::number(randomNums[0]));
+    ui->onlineModeNumShowcase2->setPlainText(QString::number(randomNums[1]));
+    ui->onlineModeNumShowcase3->setPlainText(QString::number(randomNums[2]));
+    ui->onlineModeNumShowcase4->setPlainText(QString::number(randomNums[3]));
+}
+
+void GameWidget::changeID()
+{
+    ID=ui->onlineModeIDEdit->toPlainText().split("\n")[0];
+    if(ID=="")
+        ID=QString::number(QRandomGenerator::global()->bounded(1, 114514));
+}
+
+void GameWidget::setStage(Stage stage)
+{
+    this->stage=stage;
+    switch (stage) {
+    case resting:
+        ui->modeSelectTabWidget->setTabEnabled(0,true);
+        ui->modeSelectTabWidget->setTabEnabled(1,true);
+        ui->onlineModeStartButton->setText("寻找房间");
+        ui->onlineModeIDEdit->setDisabled(false);
+        ui->onlineModePortSelect->setDisabled(false);
+        ui->onlineModeStartButton->setDisabled(false);
+        ui->onlineModeStartButton->setVisible(true);
+        ui->onlineModeQuitRoomButton->setDisabled(true);
+        ui->onlineModeQuitRoomButton->setVisible(false);
+        ui->onlineModeStackedWidget->setCurrentIndex(0);
+        break;
+    case findingRoom:
+        ui->modeSelectTabWidget->setTabEnabled(0,false);
+        ui->modeSelectTabWidget->setTabEnabled(1,false);
+        ui->onlineModeStartButton->setText("寻找中...");
+        ui->onlineModeIDEdit->setDisabled(true);
+        ui->onlineModePortSelect->setDisabled(true);
+        break;
+    case waitingStart:
+        ui->onlineModeStartButton->setText("开始游戏");
+        if(host)
+        {
+            ui->onlineModeQuitRoomButton->setText("解散房间");
+        }
+        else
+        {
+            ui->onlineModeQuitRoomButton->setText("退出房间");
+            ui->onlineModeStartButton->setDisabled(true);
+            ui->onlineModeStartButton->setVisible(false);
+        }
+        ui->onlineModeQuitRoomButton->setDisabled(false);
+        ui->onlineModeQuitRoomButton->setVisible(true);
+        break;
+    case playingGame:
+        if(host)
+        {
+            ui->onlineModeCheckButton->setText("加载题目");
+        }
+        else
+        {
+            ui->onlineModeCheckButton->setDisabled(true);
+            ui->onlineModeCheckButton->setVisible(false);
+        }
+        ui->onlineModeStackedWidget->setCurrentIndex(1);
+        break;
+    case lookingRank:
+
+        ui->onlineModeStackedWidget->setCurrentIndex(2);
+        break;
+    default:
+        break;
+    }
 }
 
 void GameWidget::on_modeSelectTabWidget_tabBarClicked(int index)
@@ -175,10 +369,20 @@ void GameWidget::on_offlineModeCheckButton_clicked()
     }
 }
 
+void GameWidget::on_onlineModeQuitRoomButton_clicked()
+{
+    if(stage==waitingStart)
+    {
+        if(host)
+            sendMessage(noticeKillRoom);
+        else
+            sendMessage(noticeQuitRoom);
+    }
+}
 
 void GameWidget::on_onlineModeIDEdit_textChanged()
 {
-    ID=ui->onlineModeIDEdit->toPlainText().split("\n")[0];
+    changeID();
 }
 
 
@@ -194,20 +398,51 @@ void GameWidget::on_onlineModePortSelect_currentIndexChanged(int index)
 
 void GameWidget::on_onlineModeStartButton_clicked()
 {
-    ui->onlineModeStackedWidget->setCurrentIndex(1);
+    // ui->onlineModeStackedWidget->setCurrentIndex(1);
+    if(stage==resting)
+    {
+        setStage(findingRoom);
+        QTimer::singleShot(100,[this](){
+            if(stage==findingRoom)
+            {
+                // 请求超时,新建房间
+                host=true;
+                setStage(waitingStart);
+                ui->onlineModeDebugLabel->setText("已创建房间 身份:房主 ID:"+ID);
+                IDList.clear();
+                IDList.append(ID);
+            }
+        });
+        sendMessage(questRoom);
+    }
+    if(stage==waitingStart)
+        sendMessage(noticeGameStart);
 }
 
 
-void GameWidget::on_onlineModeQuitButton_clicked()
+void GameWidget::on_onlineModeQuitGameButton_clicked()
 {
-    ui->onlineModeStackedWidget->setCurrentIndex(0);
+
 }
 
 
 void GameWidget::on_onlineModeCheckButton_clicked()
 {
-    //临时
-    ui->onlineModeStackedWidget->setCurrentIndex(2);
+    if(host&&ui->onlineModeCheckButton->text()=="加载题目")
+    {
+        getRandomNums();
+        sendMessage(noticeNewQuestion);
+    }
+    else
+    {
+        Expression exp;
+        exp.setExpression(ui->onlineModeTextEdit->toPlainText());
+
+        // if(exp.calculate()==Frac(24,1))
+        {
+            sendMessage(noticeCorrect);
+        }
+    }
 }
 
 
@@ -232,3 +467,7 @@ void GameWidget::on_modeSelectTabWidget_currentChanged(int index)
         offlineNumShowcaseing();
     }
 }
+
+
+
+
