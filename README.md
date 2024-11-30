@@ -46,6 +46,7 @@
         + onlineModeCreatLabel
         + onlineModeIDEdit
         + onlineModeIDEdit
+        + onlineModeQuitRoomButton
         + onlineModeStartButton
       + onlineModeGamePage
         + onlineModeGameLabel
@@ -55,7 +56,7 @@
         + onlineModeNumShowcase2
         + onlineModeNumShowcase3
         + onlineModeNumShowcase4
-        + onlineModeQuitButton
+        + onlineModeQuitGameButton
         + onlineModeCheckButton
       + onlineModeRankPage
         + onlineModeRankLabel
@@ -86,6 +87,7 @@ modeSelectTabWidget
         │   ├── onlineModeCreatLabel
         │   ├── onlineModeIDEdit
         │   ├── onlineModeIDEdit
+        │   ├── onlineModeQuitRoomButton
         │   └── onlineModeStartButton
         ├── onlineModeGamePage
         │   ├── onlineModeGameLabel
@@ -95,11 +97,12 @@ modeSelectTabWidget
         │   ├── onlineModeNumShowcase2
         │   ├── onlineModeNumShowcase3
         │   ├── onlineModeNumShowcase4
-        │   ├── onlineModeQuitButton
+        │   ├── onlineModeQuitGameButton
         │   └── onlineModeCheckButton
         └── onlineModeRankPage
             ├── onlineModeRankLabel
             ├── onlineModeRankTabel
             ├── onlineModeSaveButton
             └── onlineModeExitButton
+
 ```
