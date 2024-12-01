@@ -390,22 +390,31 @@ void GameWidget::on_offlineModeCheckButton_clicked()
     exp.setExpression(ui->offlineModeTextEdit->toPlainText());
     exp.calculate();
     Frac res=exp.res;
-    bool accept=!exp.err;
-    bool used[4]={false,false,false,false};
-    for(int i=0;i<4;i++)
-        for(int j=0;j<4;j++)
-            if(!used[j]&&exp.usedNums[i]==randomNums[j])
-            {
-                used[j]=true;
-                break;
-            }
-    for(int j=0;j<4;j++)
-        if(!used[j])
-            accept=false;
+    ExpressionError err=exp.err;
+    if(err==noError)
+    {
+        if(exp.usedNumCnt<4)
+            err=numberTooLessError;
+        else if(exp.usedNumCnt>4)
+            err=numberTooMuchError;
+        else
+        {
+            bool used[4]={false,false,false,false};
+            for(int i=0;i<4;i++)
+                for(int j=0;j<4;j++)
+                    if(!used[j]&&exp.usedNums[i]==randomNums[j])
+                    {
+                        used[j]=true;
+                        break;
+                    }
+            for(int j=0;j<4;j++)
+                if(!used[j])
+                    err=numberOutOfRangeError;
+        }
 
-    ui->offlineModeTextEdit->append(QString::number(res.num)+"/"+QString::number(res.den));
+    }
 
-    if(accept==true&&res==Frac(24))
+    if(err==noError&&res==Frac(24))
     {
         offlinePoints+=1;
         offlinePointShowcasing();
@@ -414,6 +423,10 @@ void GameWidget::on_offlineModeCheckButton_clicked()
         getRandomNums();
         offlineNumShowcaseing();
     }
+
+    ui->offlineModeTextEdit->append(QString::number(res.num)+"/"+QString::number(res.den));
+    if(err!=noError)
+        ui->offlineModeTextEdit->append(errorText(err));
 }
 
 void GameWidget::on_onlineModeQuitRoomButton_clicked()
@@ -455,7 +468,7 @@ void GameWidget::on_onlineModeStartButton_clicked()
                 // 请求超时,新建房间
                 host=true;
                 setStage(waitingStart);
-                ui->onlineModeDebugLabel->setText("已创建房间 身份:房主 ID:"+ID);
+                ui->onlineModeDebugLabel->setText("已创建房间 身份:"+QString(host?"房主":"非房主")+" ID:"+ID);
                 IDList.clear();
                 IDList.append(ID);
             }
@@ -497,26 +510,40 @@ void GameWidget::on_onlineModeCheckButton_clicked()
         exp.setExpression(ui->onlineModeTextEdit->toPlainText());
         exp.calculate();
         Frac res=exp.res;
-        bool accept=!exp.err;
-        bool used[4]={false,false,false,false};
-        for(int i=0;i<4;i++)
-            for(int j=0;j<4;j++)
-                if(!used[j]&&exp.usedNums[i]==randomNums[j])
-                {
-                    used[j]=true;
-                    break;
-                }
-        for(int j=0;j<4;j++)
-            if(!used[j])
-                accept=false;
+        ExpressionError err=exp.err;
+        if(err==noError)
+        {
+            if(exp.usedNumCnt<4)
+                err=numberTooLessError;
+            else if(exp.usedNumCnt>4)
+                err=numberTooMuchError;
+            else
+            {
+                bool used[4]={false,false,false,false};
+                for(int i=0;i<4;i++)
+                    for(int j=0;j<4;j++)
+                        if(!used[j]&&exp.usedNums[i]==randomNums[j])
+                        {
+                            used[j]=true;
+                            break;
+                        }
+                for(int j=0;j<4;j++)
+                    if(!used[j])
+                        err=numberOutOfRangeError;
+            }
 
-        ui->onlineModeTextEdit->append(QString::number(res.num)+"/"+QString::number(res.den));
+        }
 
-        if(accept==true&&res==Frac(24))
+        if(err==noError&&res==Frac(24))
         {
             sendMessage(noticeCorrect);
         }
+
+        ui->onlineModeTextEdit->append(QString::number(res.num)+"/"+QString::number(res.den));
+        if(err!=noError)
+            ui->onlineModeTextEdit->append(errorText(err));
     }
+
 }
 
 

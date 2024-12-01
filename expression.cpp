@@ -21,6 +21,33 @@ int opPri(QChar op)
     return 0;
 }
 
+QString errorText(ExpressionError err)
+{
+    switch (err) {
+    case noError:
+        return "noError";
+        break;
+    case operatorError:
+        return "operatorError";
+        break;
+    case dividedByZeroError:
+        return "dividedByZeroError";
+        break;
+    case numberTooMuchError:
+        return "numberTooMuchError";
+        break;
+    case numberTooLessError:
+        return "numberTooLessError";
+        break;
+    case numberOutOfRangeError:
+        return "numberOutOfRangeError";
+        break;
+    default:
+        break;
+    }
+    return "undefinedError";
+}
+
 Expression::Expression()
 {
     this->s="";
@@ -52,8 +79,8 @@ void Expression::calculate()
 {
     bool lastIsNum=false;
     bool nowIsNum=false;
-    int numCnt=0;
-    err=false;
+    usedNumCnt=0;
+    err=noError;
     for(auto c:"("+s+")")
     {
         nowIsNum=(c!='('&&c!=')'&&c!='+'&&c!='-'&&c!='*'&&c!='/');
@@ -78,11 +105,9 @@ void Expression::calculate()
                 numStack.push(Frac(0));
             if(lastIsNum==true)
             {
-                if(numStack.top()<Frac(1)||numStack.top()>Frac(13))
-                    err=true;
-                if(numCnt<4)
-                    usedNums[numCnt]=numStack.top().num;
-                numCnt++;
+                if(usedNumCnt<4)
+                    usedNums[usedNumCnt]=numStack.top().num;
+                usedNumCnt++;
             }
             if(c=='(')
                 opStack.push(c);
@@ -103,11 +128,9 @@ void Expression::calculate()
 
         lastIsNum=nowIsNum;
     }
-    if(numCnt!=4)
-        err=true;
     if(numStack.empty())
-        err=true;
-    res=(err?Frac(0,0):numStack.top());
+        err=operatorError;
+    res=(err==noError?numStack.top():Frac(0,0));
 }
 void Expression::stackTopCalcAux()
 {
@@ -117,6 +140,7 @@ void Expression::stackTopCalcAux()
     {
         while(numStack.empty()==false)numStack.pop();
         while(opStack.empty()==false)opStack.pop();
+        err=operatorError;
         return;
     }
     num2=numStack.top();
@@ -136,10 +160,18 @@ void Expression::stackTopCalcAux()
         num3=num1*num2;
         break;
     case '/':
-        num3=num1/num2;
+        if(num2==Frac(0))
+        {
+            err=dividedByZeroError;
+            num3=Frac(0);
+        }
+        else
+        {
+            num3=num1/num2;
+        }
         break;
     default:
-        err=true;
+        err=operatorError;
         break;
     }
     numStack.push(num3);
