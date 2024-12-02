@@ -30,6 +30,8 @@ GameWidget::GameWidget(QWidget *parent)
 
     ui->onlineModeRankTabel->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->onlineModeMemberTabel->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    ui->onlineModeRankTabel->setDisabled(true);
 }
 
 GameWidget::~GameWidget()
@@ -237,17 +239,73 @@ void GameWidget::offlinePointShowcasing()
 
 void GameWidget::offlineNumShowcaseing()
 {
-    ui->offlineModeNumShowcase1->setPlainText(QString::number(randomNums[0]));
-    ui->offlineModeNumShowcase2->setPlainText(QString::number(randomNums[1]));
-    ui->offlineModeNumShowcase3->setPlainText(QString::number(randomNums[2]));
-    ui->offlineModeNumShowcase4->setPlainText(QString::number(randomNums[3]));
+    // ui->offlineModeNumShowcase1->setPlainText(QString::number(randomNums[0]));
+    // ui->offlineModeNumShowcase2->setPlainText(QString::number(randomNums[1]));
+    // ui->offlineModeNumShowcase3->setPlainText(QString::number(randomNums[2]));
+    // ui->offlineModeNumShowcase4->setPlainText(QString::number(randomNums[3]));
+
+    // 伪随机指定花色
+    int hashed=(randomNums[0]*1+randomNums[1]*2+randomNums[2]*31+randomNums[3]*1847)%24;
+    int repeat[4]={0,0,0,0};
+    int seq[4]={0,1,2,3};
+    for(int i=0;i<hashed;i++)
+        std::next_permutation(seq,seq+4);
+    for(int i=0;i<3;i++)
+        for(int j=i+1;j<4;j++)
+            if(randomNums[i]==randomNums[j])
+                repeat[j]++;
+
+    ui->offlineModePoker1->setPixmap(
+        QPixmap(QString(":/img/poker/")+QChar(97+seq[(hashed+randomNums[0]+repeat[0])%4])+QString::number(randomNums[0])+QString(".png"))
+            .scaled(ui->offlineModePoker1->size()));
+    ui->offlineModePoker2->setPixmap(
+        QPixmap(QString(":/img/poker/")+QChar(97+seq[(hashed+randomNums[1]+repeat[1])%4])+QString::number(randomNums[1])+QString(".png"))
+            .scaled(ui->offlineModePoker2->size()));
+    ui->offlineModePoker3->setPixmap(
+        QPixmap(QString(":/img/poker/")+QChar(97+seq[(hashed+randomNums[2]+repeat[2])%4])+QString::number(randomNums[2])+QString(".png"))
+            .scaled(ui->offlineModePoker3->size()));
+    ui->offlineModePoker4->setPixmap(
+        QPixmap(QString(":/img/poker/")+QChar(97+seq[(hashed+randomNums[3]+repeat[3])%4])+QString::number(randomNums[3])+QString(".png"))
+            .scaled(ui->offlineModePoker4->size()));
 }
 void GameWidget::onlineNumShowcaseing()
 {
-    ui->onlineModeNumShowcase1->setPlainText(QString::number(randomNums[0]));
-    ui->onlineModeNumShowcase2->setPlainText(QString::number(randomNums[1]));
-    ui->onlineModeNumShowcase3->setPlainText(QString::number(randomNums[2]));
-    ui->onlineModeNumShowcase4->setPlainText(QString::number(randomNums[3]));
+    if(randomNums[0]==0)
+    {
+        ui->onlineModePoker1->setPixmap(QPixmap(":/img/poker/f.png").scaled(ui->onlineModePoker1->size()));
+        ui->onlineModePoker2->setPixmap(QPixmap(":/img/poker/f.png").scaled(ui->onlineModePoker2->size()));
+        ui->onlineModePoker3->setPixmap(QPixmap(":/img/poker/f.png").scaled(ui->onlineModePoker3->size()));
+        ui->onlineModePoker4->setPixmap(QPixmap(":/img/poker/f.png").scaled(ui->onlineModePoker4->size()));
+        return;
+    }
+    // ui->onlineModeNumShowcase1->setPlainText(QString::number(randomNums[0]));
+    // ui->onlineModeNumShowcase2->setPlainText(QString::number(randomNums[1]));
+    // ui->onlineModeNumShowcase3->setPlainText(QString::number(randomNums[2]));
+    // ui->onlineModeNumShowcase4->setPlainText(QString::number(randomNums[3]));
+
+    // 伪随机指定花色
+    int hashed=(randomNums[0]*1+randomNums[1]*2+randomNums[2]*31+randomNums[3]*1847)%24;
+    int repeat[4]={0,0,0,0};
+    int seq[4]={0,1,2,3};
+    for(int i=0;i<hashed;i++)
+        std::next_permutation(seq,seq+4);
+    for(int i=0;i<3;i++)
+        for(int j=i+1;j<4;j++)
+            if(randomNums[i]==randomNums[j])
+                repeat[j]++;
+
+    ui->onlineModePoker1->setPixmap(
+        QPixmap(QString(":/img/poker/")+QChar(97+seq[(hashed+randomNums[0])%4]+repeat[0])+QString::number(randomNums[0])+QString(".png"))
+            .scaled(ui->onlineModePoker1->size()));
+    ui->onlineModePoker2->setPixmap(
+        QPixmap(QString(":/img/poker/")+QChar(97+seq[(hashed+randomNums[1])%4]+repeat[1])+QString::number(randomNums[1])+QString(".png"))
+            .scaled(ui->onlineModePoker2->size()));
+    ui->onlineModePoker3->setPixmap(
+        QPixmap(QString(":/img/poker/")+QChar(97+seq[(hashed+randomNums[2])%4]+repeat[2])+QString::number(randomNums[2])+QString(".png"))
+            .scaled(ui->onlineModePoker3->size()));
+    ui->onlineModePoker4->setPixmap(
+        QPixmap(QString(":/img/poker/")+QChar(97+seq[(hashed+randomNums[3])%4]+repeat[3])+QString::number(randomNums[3])+QString(".png"))
+            .scaled(ui->onlineModePoker4->size()));
 }
 void GameWidget::onlineUpdataMemberTable()
 {
@@ -257,7 +315,7 @@ void GameWidget::onlineUpdataMemberTable()
     for(int i=0;i<IDList.length();i++)
     {
         QTableWidgetItem *IDItem=new QTableWidgetItem(IDList[i]);
-        QTableWidgetItem *PointsItem=new QTableWidgetItem((i==0?"房主":"用户"));
+        QTableWidgetItem *PointsItem=new QTableWidgetItem(QString(i==0?"房主":"用户")+QString(IDList[i]==ID?"(你)":""));
         ui->onlineModeMemberTabel->setItem(i,0,IDItem);
         ui->onlineModeMemberTabel->setItem(i,1,PointsItem);
     }

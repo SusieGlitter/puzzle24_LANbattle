@@ -34,10 +34,10 @@
   + offlineMode
     + offlineModeTextEdit
     + offlineModePointShowcase
-    + offlineModeNumShowcase1
-    + offlineModeNumShowcase2
-    + offlineModeNumShowcase3
-    + offlineModeNumShowcase4
+    + offlineModePoker1
+    + offlineModePoker2
+    + offlineModePoker3
+    + offlineModePoker4
     + offlineModeGiveupButton
     + offlineModeCheckButton
   + onlineMode
@@ -52,10 +52,10 @@
         + onlineModeGameLabel
         + onlineModeTextEdit
         + onlineModePointShowcase
-        + onlineModeNumShowcase1
-        + onlineModeNumShowcase2
-        + onlineModeNumShowcase3
-        + onlineModeNumShowcase4
+        + onlineModePoker1
+        + onlineModePoker2
+        + onlineModePoker3
+        + onlineModePoker4
         + onlineModeQuitGameButton
         + onlineModeCheckButton
       + onlineModeRankPage
@@ -63,6 +63,8 @@
         + onlineModeRankTabel
         + onlineModeSaveButton
         + onlineModeExitButton
+
+https://devtool.tech/tree
 -->
 
 ```text
@@ -75,10 +77,10 @@ modeSelectTabWidget
 ├── offlineMode
 │   ├── offlineModeTextEdit
 │   ├── offlineModePointShowcase
-│   ├── offlineModeNumShowcase1
-│   ├── offlineModeNumShowcase2
-│   ├── offlineModeNumShowcase3
-│   ├── offlineModeNumShowcase4
+│   ├── offlineModePoker1
+│   ├── offlineModePoker2
+│   ├── offlineModePoker3
+│   ├── offlineModePoker4
 │   ├── offlineModeGiveupButton
 │   └── offlineModeCheckButton
 └── onlineMode
@@ -93,10 +95,10 @@ modeSelectTabWidget
         │   ├── onlineModeGameLabel
         │   ├── onlineModeTextEdit
         │   ├── onlineModePointShowcase
-        │   ├── onlineModeNumShowcase1
-        │   ├── onlineModeNumShowcase2
-        │   ├── onlineModeNumShowcase3
-        │   ├── onlineModeNumShowcase4
+        │   ├── onlineModePoker1
+        │   ├── onlineModePoker2
+        │   ├── onlineModePoker3
+        │   ├── onlineModePoker4
         │   ├── onlineModeQuitGameButton
         │   └── onlineModeCheckButton
         └── onlineModeRankPage

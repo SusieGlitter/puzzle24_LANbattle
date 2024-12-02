@@ -93,7 +93,7 @@
        <x>20</x>
        <y>20</y>
        <width>75</width>
-       <height>100</height>
+       <height>106</height>
       </rect>
      </property>
     </widget>
@@ -103,7 +103,7 @@
        <x>115</x>
        <y>20</y>
        <width>75</width>
-       <height>100</height>
+       <height>106</height>
       </rect>
      </property>
     </widget>
@@ -113,7 +113,7 @@
        <x>210</x>
        <y>20</y>
        <width>75</width>
-       <height>100</height>
+       <height>106</height>
       </rect>
      </property>
     </widget>
@@ -123,7 +123,7 @@
        <x>305</x>
        <y>20</y>
        <width>75</width>
-       <height>100</height>
+       <height>106</height>
       </rect>
      </property>
     </widget>
@@ -177,6 +177,58 @@
      </property>
      <property name="text">
       <string>提交</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="offlineModePoker1">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>75</width>
+       <height>106</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="offlineModePoker2">
+     <property name="geometry">
+      <rect>
+       <x>115</x>
+       <y>20</y>
+       <width>75</width>
+       <height>106</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="offlineModePoker4">
+     <property name="geometry">
+      <rect>
+       <x>305</x>
+       <y>20</y>
+       <width>75</width>
+       <height>106</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="offlineModePoker3">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>20</y>
+       <width>75</width>
+       <height>106</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>
@@ -237,7 +289,7 @@
         </rect>
        </property>
        <property name="placeholderText">
-        <string>输入你的昵称:</string>
+        <string>请输入昵称:</string>
        </property>
       </widget>
       <widget class="QLabel" name="onlineModeCreatLabel">
@@ -335,7 +387,7 @@
          <x>210</x>
          <y>40</y>
          <width>75</width>
-         <height>100</height>
+         <height>106</height>
         </rect>
        </property>
       </widget>
@@ -345,7 +397,7 @@
          <x>305</x>
          <y>40</y>
          <width>75</width>
-         <height>100</height>
+         <height>106</height>
         </rect>
        </property>
       </widget>
@@ -355,7 +407,7 @@
          <x>20</x>
          <y>40</y>
          <width>75</width>
-         <height>100</height>
+         <height>106</height>
         </rect>
        </property>
       </widget>
@@ -365,7 +417,7 @@
          <x>115</x>
          <y>40</y>
          <width>75</width>
-         <height>100</height>
+         <height>106</height>
         </rect>
        </property>
       </widget>
@@ -435,6 +487,58 @@
        </property>
        <property name="text">
         <string>结束游戏</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="onlineModePoker1">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>40</y>
+         <width>75</width>
+         <height>106</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="onlineModePoker2">
+       <property name="geometry">
+        <rect>
+         <x>115</x>
+         <y>40</y>
+         <width>75</width>
+         <height>106</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="onlineModePoker4">
+       <property name="geometry">
+        <rect>
+         <x>305</x>
+         <y>40</y>
+         <width>75</width>
+         <height>106</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="onlineModePoker3">
+       <property name="geometry">
+        <rect>
+         <x>210</x>
+         <y>40</y>
+         <width>75</width>
+         <height>106</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>
