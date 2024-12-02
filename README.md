@@ -45,7 +45,7 @@
       + onlineModeCreatPage
         + onlineModeCreatLabel
         + onlineModeIDEdit
-        + onlineModeIDEdit
+        + onlineModeMemberTabel
         + onlineModeQuitRoomButton
         + onlineModeStartButton
       + onlineModeGamePage
@@ -86,7 +86,7 @@ modeSelectTabWidget
         ├── onlineModeCreatPage
         │   ├── onlineModeCreatLabel
         │   ├── onlineModeIDEdit
-        │   ├── onlineModeIDEdit
+        │   ├── onlineModeMemberTabel
         │   ├── onlineModeQuitRoomButton
         │   └── onlineModeStartButton
         ├── onlineModeGamePage
