@@ -79,7 +79,36 @@ void Expression::calculate()
 {
     bool lastIsNum=false;
     bool nowIsNum=false;
+    for(auto c:s)
+    {
+        nowIsNum=(c!='('&&c!=')'&&c!='+'&&c!='-'&&c!='*'&&c!='/');
+        if(nowIsNum)
+        {
+            if(lastIsNum==true)
+            {
+                Frac temp=numStack.top();
+                numStack.pop();
+                temp=temp*Frac(10)+Frac(c.digitValue());
+                numStack.push(temp);
+            }
+            else
+            {
+                numStack.push(Frac(c.digitValue()));
+            }
+        }
+
+        lastIsNum=nowIsNum;
+    }
     usedNumCnt=0;
+    while(numStack.empty()==false)
+    {
+        if(usedNumCnt<4)
+            usedNums[usedNumCnt]=numStack.top().num;
+        numStack.pop();
+        usedNumCnt++;
+    }
+    lastIsNum=false;
+    nowIsNum=false;
     err=noError;
     for(auto c:"("+s+")")
     {
@@ -103,12 +132,6 @@ void Expression::calculate()
         {
             if(lastIsNum==false&&(c=='+'||c=='-')&&(opStack.empty()||opStack.top()=='('))
                 numStack.push(Frac(0));
-            if(lastIsNum==true)
-            {
-                if(usedNumCnt<4)
-                    usedNums[usedNumCnt]=numStack.top().num;
-                usedNumCnt++;
-            }
             if(c=='(')
                 opStack.push(c);
             else if(c=='+'||c=='-'||c=='*'||c=='/')
@@ -122,6 +145,7 @@ void Expression::calculate()
                 while(opStack.top()!='(')
                     stackTopCalcAux();
                 opStack.pop();
+                nowIsNum=true;
             }
 
         }

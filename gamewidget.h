@@ -107,6 +107,8 @@ private:
 
     void onlineNumShowcaseing();
 
+    void onlineUpdataMemberTable();
+
     QString ID;
     void changeID();
     QStringList IDList;
