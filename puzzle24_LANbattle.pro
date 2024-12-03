@@ -33,4 +33,4 @@ RESOURCES += \
     img.qrc \
     img.qrc
 
-RC_ICONS = icon.ico
+RC_ICONS = icon2.ico
