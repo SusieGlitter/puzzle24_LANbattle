@@ -56,6 +56,7 @@
         + onlineModePoker2
         + onlineModePoker3
         + onlineModePoker4
+        + onlineModeTimer
         + onlineModeQuitGameButton
         + onlineModeCheckButton
       + onlineModeRankPage
@@ -99,6 +100,7 @@ modeSelectTabWidget
         │   ├── onlineModePoker2
         │   ├── onlineModePoker3
         │   ├── onlineModePoker4
+        │   ├── onlineModeTimer
         │   ├── onlineModeQuitGameButton
         │   └── onlineModeCheckButton
         └── onlineModeRankPage
