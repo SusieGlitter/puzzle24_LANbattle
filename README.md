@@ -30,6 +30,7 @@
     + solveModeTextEdit
     + solveModeTextShowcase
     + solveModeFileButton
+    + solveModeFileSaveButton
     + solveModeSolveButton
   + offlineMode
     + offlineModeTextEdit
@@ -74,6 +75,7 @@ modeSelectTabWidget
 │   ├── solveModeTextEdit
 │   ├── solveModeTextShowcase
 │   ├── solveModeFileButton
+│   ├── solveModeSaveButton
 │   └── solveModeSolveButton
 ├── offlineMode
 │   ├── offlineModeTextEdit
